@@ -1,0 +1,11 @@
+#+TITLE: muse
+
+Program that generates music playlists from sketches. We use this to explore
+music in a playful way.
+
+* Usage
+Set up API keys:
++ ~OPENAI_API_KEY~ for LLM access.
++ ~REPLICATE_API_TOKEN~ for image description models.
+
+Run ~poetry install~, then ~poetry run streamlit run scripts/serve.py~.
