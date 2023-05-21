@@ -43,4 +43,7 @@ if __name__ == "__main__":
         if canvas_result.image_data is not None:
             description = image_to_description(canvas_result.image_data)
 
-        st.markdown(description_to_songs(description))
+        if description is None:
+            st.markdown("Error in generating image description.")
+        else:
+            st.markdown(description_to_songs(description))
