@@ -27,21 +27,32 @@ def image_to_description(image_data, replicate_api_token=None) -> str | None:
         return None
 
 
-def description_to_songs(description: str) -> str:
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": """
-            You are getting a description of drawing made by someone via an
-            image captioning model. You have to clean the description of
-            sentences like 'drawing of', etc. and show that. Then you have to
-            list 10 songs that follow the description. Return text properly
-            formatted in markdown.
+def description_to_songs(description: str, openai_api_key=None) -> str:
 
-            Now, the image captioning descriptions will be provided by the
-            user.
-            """},
-            {"role": "user", "content": description}
-        ]
-    )
+    if openai_api_key:
+        old_key_value = openai.api_key
+        openai.api_key = openai_api_key
+
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": """
+                You are getting a description of drawing made by someone via an
+                image captioning model. You have to clean the description of
+                sentences like 'drawing of', etc. and show that. Then you have to
+                list 10 songs that follow the description. Return text properly
+                formatted in markdown.
+
+                Now, the image captioning descriptions will be provided by the
+                user.
+                """},
+                {"role": "user", "content": description}
+            ]
+        )
+    except Exception as e:
+        if openai_api_key:
+            openai.api_key = old_key_value
+        raise e
+
     return response.choices[0]["message"].content

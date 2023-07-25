@@ -49,9 +49,10 @@ if __name__ == "__main__":
         else:
             if canvas_result.image_data is not None:
                 description = image_to_description(canvas_result.image_data, replicate_api_token)
-                if description in None:
+
+                if description is None:
                     output = st.markdown("Error in generating image description.")
                 else:
-                    output = description_to_songs(description)
+                    output = description_to_songs(description, openai_api_key)
 
         st.markdown(output)
