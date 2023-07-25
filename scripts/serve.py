@@ -24,9 +24,11 @@ if __name__ == "__main__":
 
     with col2:
         stroke_color = st.color_picker("Stroke color hex: ")
+        bg_color = st.color_picker("Background color hex: ", "#eee")
 
     with col3:
-        bg_color = st.color_picker("Background color hex: ", "#eee")
+        openai_api_key = st.text_input("OPENAI API KEY", type="password")
+        replicate_api_token = st.text_input("REPLICATE API TOKEN", type="password")
 
     canvas_result = st_canvas(
         fill_color="rgba(255, 165, 0, 0.3)",
@@ -40,10 +42,16 @@ if __name__ == "__main__":
     )
 
     if st.button("Generate"):
-        if canvas_result.image_data is not None:
-            description = image_to_description(canvas_result.image_data)
+        output = ""
 
-        if description is None:
-            st.markdown("Error in generating image description.")
+        if not (openai_api_key or replicate_api_token):
+            output = "> API keys not set. Please provide them in the input fields at the top."
         else:
-            st.markdown(description_to_songs(description))
+            if canvas_result.image_data is not None:
+                description = image_to_description(canvas_result.image_data, replicate_api_token)
+                if description in None:
+                    output = st.markdown("Error in generating image description.")
+                else:
+                    output = description_to_songs(description)
+
+        st.markdown(output)

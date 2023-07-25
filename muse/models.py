@@ -6,7 +6,7 @@ import replicate
 from PIL import Image
 
 
-def image_to_description(image_data) -> str | None:
+def image_to_description(image_data, replicate_api_token=None) -> str | None:
     """
     Convert image data to textual description.
     """
@@ -17,12 +17,14 @@ def image_to_description(image_data) -> str | None:
 
     try:
         with open(temp_file_name, "rb") as fp:
-            return replicate.run(
+            client = replicate.Client(api_token=replicate_api_token)
+            return client.run(
                 "salesforce/blip:2e1dddc8621f72155f24cf2e0adbde548458d3cab9f00c0139eea840d0ac4746",
                 input={"image": fp}
             )
     except Exception:
         os.unlink(temp_file_name)
+        return None
 
 
 def description_to_songs(description: str) -> str:
