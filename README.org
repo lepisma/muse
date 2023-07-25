@@ -1,11 +1,18 @@
 #+TITLE: muse
 
-Program that generates music playlists from sketches. We use this to explore
-music in a playful way.
+Program that generates music playlists from sketches. It's a collaboration done
+with [[https://unnu.so/about/][Unnu]]. We use this to explore music in a playful way. Two patterns are
+interesting:
 
-* Usage
-Set up API keys:
+1. Draw the right image to find a defined song, say, 'yellow submarine'.
+2. Draw anything, a mood, a picture, a vision, and discover the suggested songs
+   you get. This has limitations on the LLM's current state of knowledge.
+
+Accessible [[https://lepisma-muse.streamlit.app/][here]]. You will have to put the following API keys in the interface to
+make it work:
+
 + ~OPENAI_API_KEY~ for LLM access.
 + ~REPLICATE_API_TOKEN~ for image description models.
 
-Run ~poetry install~, then ~poetry run streamlit run scripts/serve.py~.
+Run ~poetry install~, then ~poetry run streamlit run scripts/serve.py~ if you are
+running it locally.
