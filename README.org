@@ -17,3 +17,9 @@ make it work:
 
 Run ~poetry install~, then ~poetry run streamlit run scripts/serve.py~ if you are
 running it locally.
+
+* Changelog
+
+** v0.2.0
+Switch from a composition of ~salesforce/blip~ (image description) and
+~gpt-3.5-turbo~ to ~gpt-4-vision-preview~.

@@ -1,9 +1,7 @@
 import base64
-import os
 import tempfile
 
 import openai
-import replicate
 from PIL import Image
 
 
