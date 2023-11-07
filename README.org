@@ -3,8 +3,9 @@
 [[https://github.com/lepisma/muse/tags][file:https://img.shields.io/github/v/tag/lepisma/muse.svg]]
 
 Program that generates music playlists from sketches. It's a collaboration done
-with [[https://unnu.so/about/][Unnu]]. We use this to explore music in a playful way. Two patterns are
-interesting:
+with [[https://unnu.so/about/][Unnu]]. Some initial notes are in [[https://lepisma.xyz/2023/07/25/muse/index.html][this blog post]].
+
+We use this to explore music in a playful way. Two patterns are interesting:
 
 1. Draw the right image to find a defined song, say, 'yellow submarine'.
 2. Draw anything, a mood, a picture, a vision, and discover the suggested songs
