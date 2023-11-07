@@ -5,7 +5,7 @@ Usage:
 
 import streamlit as st
 from docopt import docopt
-from muse.models import description_to_songs, image_to_description
+from muse.models import image_to_songs
 from streamlit_drawable_canvas import st_canvas
 
 if __name__ == "__main__":
@@ -28,7 +28,7 @@ if __name__ == "__main__":
 
     with col3:
         openai_api_key = st.text_input("OPENAI API KEY", type="password")
-        replicate_api_token = st.text_input("REPLICATE API TOKEN", type="password")
+        # replicate_api_token = st.text_input("REPLICATE API TOKEN", type="password")
 
     canvas_result = st_canvas(
         fill_color="rgba(255, 165, 0, 0.3)",
@@ -44,15 +44,10 @@ if __name__ == "__main__":
     if st.button("Generate"):
         output = ""
 
-        if not (openai_api_key or replicate_api_token):
+        if not openai_api_key:
             output = "> API keys not set. Please provide them in the input fields at the top."
         else:
             if canvas_result.image_data is not None:
-                description = image_to_description(canvas_result.image_data, replicate_api_token)
-
-                if description is None:
-                    output = st.markdown("Error in generating image description.")
-                else:
-                    output = description_to_songs(description, openai_api_key)
+                output = image_to_songs(canvas_result.image_data, openai_api_key)
 
         st.markdown(output)

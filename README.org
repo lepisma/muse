@@ -11,8 +11,7 @@ interesting:
 Accessible [[https://lepisma-muse.streamlit.app/][here]]. You will have to put the following API keys in the interface to
 make it work:
 
-+ ~OPENAI_API_KEY~ for LLM access.
-+ ~REPLICATE_API_TOKEN~ for image description models.
++ ~OPENAI_API_KEY~ for LLM access. You need GPT4 Vision access on this key.
 
 Run ~poetry install~, then ~poetry run streamlit run scripts/serve.py~ if you are
 running it locally.

@@ -1,3 +1,4 @@
+import base64
 import os
 import tempfile
 
@@ -6,49 +7,48 @@ import replicate
 from PIL import Image
 
 
-def image_to_description(image_data, replicate_api_token=None) -> str | None:
-    """
-    Convert image data to textual description.
-    """
-
+def b64_encode_image(image_data):
+    # TODO: Fix this to and fro
     with tempfile.NamedTemporaryFile(delete=False) as temp_file:
         temp_file_name = temp_file.name
         Image.fromarray(image_data).save(temp_file_name, "PNG")
 
-    try:
-        with open(temp_file_name, "rb") as fp:
-            client = replicate.Client(api_token=replicate_api_token)
-            return client.run(
-                "salesforce/blip:2e1dddc8621f72155f24cf2e0adbde548458d3cab9f00c0139eea840d0ac4746",
-                input={"image": fp}
-            )
-    except Exception:
-        os.unlink(temp_file_name)
-        return None
+    with open(temp_file_name, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode("utf-8")
 
 
-def description_to_songs(description: str, openai_api_key=None) -> str:
+def image_to_songs(image_data, openai_api_key=None) -> str:
+    """
+    Directly go from image to songs using GPT4 vision model.
+    """
 
     if openai_api_key:
         old_key_value = openai.api_key
         openai.api_key = openai_api_key
 
+    base64_image = b64_encode_image(image_data)
+
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4-vision-preview",
             messages=[
-                {"role": "system", "content": """
-                You are getting a description of drawing made by someone via an
-                image captioning model. You have to clean the description of
-                sentences like 'drawing of', etc. and show that. Then you have to
-                list 10 songs that follow the description. Return text properly
-                formatted in markdown.
-
-                Now, the image captioning descriptions will be provided by the
-                user.
-                """},
-                {"role": "user", "content": description}
-            ]
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Here is a drawing made by someone. You have to list 10 songs that could be described by the drawing. First describe the drawing in words and then try listing songs around what you described. Return text properly formatted in markdown."
+                        },
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{base64_image}"
+                            }
+                        }
+                    ]
+                }
+            ],
+            max_tokens=1000
         )
     except Exception as e:
         if openai_api_key:
